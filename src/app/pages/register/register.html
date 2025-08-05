@@ -1,0 +1,84 @@
+<div class="h-screen flex items-center justify-center">
+  <form
+    class="shadow-md rounded-md p-5 bg-white w-1/5"
+    [formGroup]="registerForm"
+    (ngSubmit)="register()"
+  >
+    @for(error of errors; track error){
+    <div
+      class="bg-red-100 border mb-2 flex flex-col gap-2 border-red-400 text-red-400 px4 py4 rounded-md relative"
+    >
+      <div class="text-xs p-2">{{ error.description }}</div>
+    </div>
+    }
+    <div class="py-4">
+      <h1 class="font-bold text-left py-2">Register</h1>
+      <h6 class="text-slate-600 text-base">Create your account</h6>
+    </div>
+
+    <mat-form-field apperance="fill" class="w-full">
+      <mat-label>Email</mat-label>
+      <input matInput placeholder="Email" formControlName="email" />
+      <mat-icon matPrefix>email</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field apperance="fill" class="w-full">
+      <mat-label>Full name</mat-label>
+      <input matInput placeholder="Full name" formControlName="Fullname" />
+      <mat-icon matPrefix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field apperance="fill" class="w-full">
+      <mat-label>Roles</mat-label>
+      <mat-select multiple formControlName="roles">
+        @for (role of roles$ | async; track role.roleName) {
+        <mat-option [value]="role.roleName">{{ role.roleName }}</mat-option>
+        }
+      </mat-select>
+      <mat-icon matPrefix>groups</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field apperance="fill" class="w-full">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        type="{{ passwordHide ? 'password' : 'text' }}"
+        placeholder="Password"
+        formControlName="password"
+      />
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon (click)="passwordHide = !passwordHide" matSuffix>
+        {{ passwordHide ? "visibility_off" : "visibility" }}
+      </mat-icon>
+    </mat-form-field>
+
+    <mat-form-field apperance="fill" class="w-full">
+      <mat-label>Confirm password</mat-label>
+      <input
+        matInput
+        type="{{ confirmPasswordHide ? 'password' : 'text' }}"
+        placeholder="Confirm password"
+        formControlName="confirmPassword"
+      />
+      <mat-icon matPrefix>lock</mat-icon>
+      <mat-icon (click)="confirmPasswordHide = !confirmPasswordHide" matSuffix>
+        {{ confirmPasswordHide ? "visibility_off" : "visibility" }}
+      </mat-icon>
+    </mat-form-field>
+    @if(registerForm.hasError('passwordMismatch') &&
+    registerForm.get('confirmPassword')?.touched){
+    <span class="text-red-500 text-sm">passwords must match</span>
+    }
+    <button
+      type="submit"
+      class="w-full border border-slate-200 rounded-md disabled:bg-purple-400 py-2 px-3 bg-purple-700 text-white font-bold"
+    >
+      Register
+    </button>
+
+    <div class="my-4">
+      <span> Already have an account? </span>
+      <a href="" class="text-purple-700" [routerLink]="['/login']">Login</a>
+    </div>
+  </form>
+</div>
