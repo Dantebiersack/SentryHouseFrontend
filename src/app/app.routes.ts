@@ -14,6 +14,7 @@ import { Proveedores } from './pages/proveedores/proveedores';
 import { MateriaPrima } from './pages/materia-prima/materia-prima';
 import { Servicios } from './pages/servicios/servicios';
 import { Contactanos } from './pages/contactanos/contactanos';
+import { Comentarios } from './pages/comentarios/comentarios';
 
 export const routes: Routes = [
     {
@@ -89,6 +90,14 @@ export const routes: Routes = [
      {
         path: 'contactanos',
         component: Contactanos,
+        canActivate: [roleGuard],
+        data:{
+            roles: ['Admin', 'User']
+        } 
+    },
+    {
+        path: 'comentarios',
+        component: Comentarios,
         canActivate: [roleGuard],
         data:{
             roles: ['Admin', 'User']
