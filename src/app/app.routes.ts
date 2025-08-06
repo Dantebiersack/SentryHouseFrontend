@@ -13,6 +13,7 @@ import { ChangePassword } from './pages/change-password/change-password';
 import { Proveedores } from './pages/proveedores/proveedores';
 import { MateriaPrima } from './pages/materia-prima/materia-prima';
 import { Servicios } from './pages/servicios/servicios';
+import { Contactanos } from './pages/contactanos/contactanos';
 
 export const routes: Routes = [
     {
@@ -84,5 +85,13 @@ export const routes: Routes = [
         data: {
             roles: ['Admin']
         }
+    },
+     {
+        path: 'contactanos',
+        component: Contactanos,
+        canActivate: [roleGuard],
+        data:{
+            roles: ['Admin', 'User']
+        } 
     },
 ];
