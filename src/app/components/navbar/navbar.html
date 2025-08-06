@@ -1,85 +1,57 @@
 <div>
-  <mat-toolbar
-    color="primary"
-    class="px-12 py-2 flex justify-between items-center"
-  >
-    <!-- Logo -->
-    <a routerLink="/" class="flex items-center gap-3">
-      <img
-        src="images/greencodeLogo.jpg"
-        alt="Logo"
-        class="h-10 w-10 rounded-full border-2 border-white shadow-md"
-      />
-      <span class="text-white font-semibold text-lg">Sentry House</span>
-    </a>
-
-    @if (isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin')) {
-    <div class="flex gap-8 items-center">
-      <a
-        [routerLink]="['users']"
-        class="text-white hover:underline flex items-center gap-1"
-      >
-        <mat-icon>groups</mat-icon> Users
-      </a>
-      <a
-        [routerLink]="['roles']"
-        class="text-white hover:underline flex items-center gap-1"
-      >
-        <mat-icon>settings</mat-icon> Roles
-      </a>
-      <a
-        [routerLink]="['proveedores']"
-        class="text-white hover:underline flex items-center gap-1"
-      >
-        <mat-icon>inventory_2</mat-icon> Proveedores
-      </a>
-      <a
-        [routerLink]="['materia-prima']"
-        class="text-white hover:underline flex items-center gap-1"
-      >
-        <mat-icon>science</mat-icon> Materia Prima
-      </a>
-      <a
-        [routerLink]="['servicios']"
-        class="text-white hover:underline flex items-center gap-1"
-      >
-        <mat-icon>toc</mat-icon> Servicios
-      </a>
-    </div>
-    }
-
-    <div *ngIf="isLoggedIn() && authService.getUserDetail() as userDetail">
-      <div class="flex items-center gap-4">
-        <a
-          [matMenuTriggerFor]="menu"
-          class="flex items-center gap-2 cursor-pointer"
-        >
-          <div
-            class="bg-red-400 text-white font-bold shadow-md rounded-full w-10 h-10 flex justify-center items-center"
-          >
-            {{ userDetail.fullName[0].toUpperCase() }}
-          </div>
-          <div class="text-white text-sm">
-            <div class="font-medium">{{ userDetail.fullName }}</div>
-            <div class="text-xs">{{ userDetail.roles }}</div>
-          </div>
+    <mat-toolbar class="!bg-green-700 px-12 py-2 flex justify-between items-center">
+        <!-- Logo -->
+        <a routerLink="/" class="flex items-center gap-3">
+            <img src="images/greencodeLogo.jpg" alt="Logo" class="h-10 w-10 rounded-full border-2 border-white shadow-md" />
+            <span class="text-white font-semibold text-lg">Sentry House</span>
         </a>
-        <mat-menu #menu="matMenu">
-          <button [routerLink]="['account', userDetail.id]" mat-menu-item>
+
+        @if (isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin')) {
+        <div class="flex gap-8 items-center">
+            <a [routerLink]="['users']" class="text-white hover:underline flex items-center gap-1">
+                <mat-icon>groups</mat-icon> Users
+            </a>
+            <a [routerLink]="['roles']" class="text-white hover:underline flex items-center gap-1">
+                <mat-icon>settings</mat-icon> Roles
+            </a>
+            <a [routerLink]="['proveedores']" class="text-white hover:underline flex items-center gap-1">
+                <mat-icon>inventory_2</mat-icon> Proveedores
+            </a>
+            <a [routerLink]="['materia-prima']" class="text-white hover:underline flex items-center gap-1">
+                <mat-icon>science</mat-icon> Materia Prima
+            </a>
+            <a [routerLink]="['servicios']" class="text-white hover:underline flex items-center gap-1">
+                <mat-icon>toc</mat-icon> Servicios
+            </a>
+        </div>
+        }
+
+        <div *ngIf="isLoggedIn() && authService.getUserDetail() as userDetail">
+            <div class="flex items-center gap-4">
+                <a [matMenuTriggerFor]="menu" class="flex items-center gap-2 cursor-pointer">
+                    <div class="bg-red-400 text-white font-bold shadow-md rounded-full w-10 h-10 flex justify-center items-center">
+                        {{ userDetail.fullName[0].toUpperCase() }}
+                    </div>
+                    <div class="text-white text-sm">
+                        <div class="font-medium">{{ userDetail.fullName }}</div>
+                        <div class="text-xs">{{ userDetail.roles }}</div>
+                    </div>
+                </a>
+                <mat-menu #menu="matMenu">
+                    <button [routerLink]="['account', userDetail.id]" mat-menu-item>
             <mat-icon>account_circle</mat-icon>
             <span>View Profile</span>
           </button>
-          <button routerLink="/change-password" mat-menu-item>
+                    <button routerLink="/change-password" mat-menu-item>
             <mat-icon>lock</mat-icon>
             <span>Change Password</span>
           </button>
-          <button (click)="logout()" mat-menu-item>
+                    <button (click)="logout()" mat-menu-item>
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
           </button>
-        </mat-menu>
-      </div>
-    </div>
-  </mat-toolbar>
+                </mat-menu>
+            </div>
+        </div>
+    </mat-toolbar>
 </div>
-
