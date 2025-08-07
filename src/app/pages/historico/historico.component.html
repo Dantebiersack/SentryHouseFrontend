@@ -1,0 +1,30 @@
+<div class="mx-60 py-10">
+  <h1 class="text-3xl font-bold">Histórico de Ventas</h1>
+  <div class="shadow-md text-left rounded-md mt-4">
+    <table class="w-full rounded-md border-collapse">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Nombre del Servicio</th>
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Descripción</th>
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Fecha de Venta</th>
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Archivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let venta of ventas" class="border-b border-gray-200 hover:bg-gray-100">
+          <td class="px-4 py-3 text-sm text-gray-600">{{ venta.servicioNombre }}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">{{ venta.servicioDescripcion }}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">{{ venta.fechaVenta | date:'medium' }}</td>
+          <td class="px-4 py-3 text-sm text-center">
+            <a [href]="venta.archivoDocumento" target="_blank">
+              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-full">
+                Ver archivo
+              </button>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

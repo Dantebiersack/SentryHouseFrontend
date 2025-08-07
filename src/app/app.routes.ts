@@ -15,6 +15,7 @@ import { MateriaPrima } from './pages/materia-prima/materia-prima';
 import { Servicios } from './pages/servicios/servicios';
 import { Contactanos } from './pages/contactanos/contactanos';
 import { Comentarios } from './pages/comentarios/comentarios';
+import { HistoricoComponent } from './pages/historico/historico.component';
 
 export const routes: Routes = [
     {
@@ -101,6 +102,14 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data:{
             roles: ['Admin', 'User']
+        } 
+    },
+    {
+        path: 'historico',
+        component: HistoricoComponent,
+        canActivate: [roleGuard],
+        data:{
+            roles: ['User']
         } 
     },
 ];
