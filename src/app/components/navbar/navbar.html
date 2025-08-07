@@ -38,10 +38,10 @@
       <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('User')"
         class="flex gap-8 items-center">
         <a [routerLink]="['']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>groups</mat-icon> Home
+          <mat-icon>home</mat-icon> Home
         </a>
         <a [routerLink]="['historico']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>groups</mat-icon> Historico
+          <mat-icon>list</mat-icon> Historico
         </a>
         
       </div>

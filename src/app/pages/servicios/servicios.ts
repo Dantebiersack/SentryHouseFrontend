@@ -22,6 +22,7 @@ export class Servicios implements OnInit {
     id: [null],
     nombre: ['', Validators.required],
     descripcion: ['', Validators.required],
+    archivoDocumento: ['', Validators.required]
   });
 
   ngOnInit(): void {
@@ -64,7 +65,8 @@ export class Servicios implements OnInit {
     this.form.setValue({
       id: servicio.id,
       nombre: servicio.nombre ?? '',
-      descripcion: servicio.descripcion ?? ''
+      descripcion: servicio.descripcion ?? '',
+      archivoDocumento: servicio.archivoDocumento ?? ''
     });
 
     this.mostrarFormulario.set(true);
