@@ -60,8 +60,8 @@ body {
 
 .submit-btn {
     padding: 12px 25px;
-    background-color: #333;
-    color: #fff;
+    background-color: #2dc22f;
+    color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -71,7 +71,7 @@ body {
 }
 
 .submit-btn:hover {
-    background-color: #555;
+    background-color: #38ca50;
 }
 
 .section-title {

@@ -1,83 +1,82 @@
 <div>
-  <mat-toolbar class="!bg-green-700 px-12 py-2 flex justify-between items-center">
-    <!-- Logo -->
-    <a [routerLink]="['/']" class="text-white hover:underline flex items-center gap-1">
-      <img src="images/greencodeLogo.jpg" alt="Logo" class="h-10 w-10 rounded-full border-2 border-white shadow-md" />
-      <span class="text-white font-semibold text-lg">Sentry House</span>
-    </a>
+    <mat-toolbar class="!bg-green-700 px-12 py-2 flex justify-between items-center">
+        <!-- Logo -->
+        <a [routerLink]="['/']" class="text-white hover:underline flex items-center gap-1">
+            <img src="images/greencodeLogo.jpg" alt="Logo" class="h-10 w-10 rounded-full border-2 border-white shadow-md" />
+            <span class="text-white font-semibold text-lg">Sentry House</span>
+        </a>
 
-    <div class="flex gap-8 items-center">
-      <!-- Menú según rol -->
-      <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin'); else userMenu"
-        class="flex gap-8 items-center">
-        <a [routerLink]="['users']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>groups</mat-icon> Users
-        </a>
-        <a [routerLink]="['roles']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>settings</mat-icon> Roles
-        </a>
-        <a [routerLink]="['proveedores']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>inventory_2</mat-icon> Proveedores
-        </a>
-        <a [routerLink]="['materia-prima']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>science</mat-icon> Materia Prima
-        </a>
-        <a [routerLink]="['servicios']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>toc</mat-icon> Servicios
-        </a>
-        <a [routerLink]="['comentarios']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>comment</mat-icon> Comentarios
-        </a>
-      </div>
+        <div class="flex gap-8 items-center">
+            <!-- Menú según rol -->
+            <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin'); else userMenu" class="flex gap-8 items-center">
+                <a [routerLink]="['users']" class="text-white hover:underline flex items-center gap-1">
+                    <mat-icon>groups</mat-icon>Usuarios
+                </a>
+                <a [routerLink]="['roles']" class="text-white hover:underline flex items-center gap-1">
+                    <mat-icon>settings</mat-icon> Roles
+                </a>
+                <a [routerLink]="['proveedores']" class="text-white hover:underline flex items-center gap-1">
+                    <mat-icon>inventory_2</mat-icon> Proveedores
+                </a>
+                <a [routerLink]="['materia-prima']" class="text-white hover:underline flex items-center gap-1">
+                    <mat-icon>science</mat-icon> Materia Prima
+                </a>
+                <a [routerLink]="['servicios']" class="text-white hover:underline flex items-center gap-1">
+                    <mat-icon>toc</mat-icon> Servicios
+                </a>
+                <a [routerLink]="['comentarios']" class="text-white hover:underline flex items-center gap-1">
+                    <mat-icon>comment</mat-icon> Comentarios
+                </a>
+            </div>
 
-      <!-- Menú para User -->
-      <ng-template #userMenu>
-        <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('User')"
-          class="flex gap-8 items-center">
-          <a [routerLink]="['']" class="text-white hover:underline flex items-center gap-1">
-            <mat-icon>home</mat-icon> Home
-          </a>
-          <a [routerLink]="['historico']" class="text-white hover:underline flex items-center gap-1">
-            <mat-icon>list</mat-icon> Histórico
-          </a>
+            <!-- Menú para User -->
+            <ng-template #userMenu>
+                <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('User')" class="flex gap-8 items-center">
+                    <a [routerLink]="['']" class="text-white hover:underline flex items-center gap-1">
+                        <mat-icon>home</mat-icon> Home
+                    </a>
+                    <a [routerLink]="['historico']" class="text-white hover:underline flex items-center gap-1">
+                        <mat-icon>list</mat-icon> Histórico
+                    </a>
+                </div>
+            </ng-template>
+            @if (!(isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin'))) {
+            <a [routerLink]="['/contactanos']" class="text-white hover:underline flex items-center gap-1">
+                <mat-icon>mail</mat-icon> Contáctanos
+            </a>
+            }
         </div>
-      </ng-template>
-      <a [routerLink]="['/contactanos']" class="text-white hover:underline flex items-center gap-1">
-            <mat-icon>mail</mat-icon> Contáctanos
-      </a>
-    </div>
 
 
 
 
-    <!-- Perfil del usuario -->
-    <div *ngIf="isLoggedIn() && authService.getUserDetail() as userDetail">
-      <div class="flex items-center gap-4">
-        <a [matMenuTriggerFor]="menu" class="flex items-center gap-2 cursor-pointer">
-          <div
-            class="bg-red-400 text-white font-bold shadow-md rounded-full w-10 h-10 flex justify-center items-center">
-            {{ userDetail.fullName[0]?.toUpperCase() }}
-          </div>
-          <div class="text-white text-sm">
-            <div class="font-medium">{{ userDetail.fullName }}</div>
-            <div class="text-xs">{{ userDetail.roles }}</div>
-          </div>
-        </a>
-        <mat-menu #menu="matMenu">
-          <button [routerLink]="['account', userDetail.id]" mat-menu-item>
+        <!-- Perfil del usuario -->
+        <div *ngIf="isLoggedIn() && authService.getUserDetail() as userDetail">
+            <div class="flex items-center gap-4">
+                <a [matMenuTriggerFor]="menu" class="flex items-center gap-2 cursor-pointer">
+                    <div class="bg-red-400 text-white font-bold shadow-md rounded-full w-10 h-10 flex justify-center items-center">
+                        {{ userDetail.fullName[0]?.toUpperCase() }}
+                    </div>
+                    <div class="text-white text-sm">
+                        <div class="font-medium">{{ userDetail.fullName }}</div>
+                        <div class="text-xs">{{ userDetail.roles }}</div>
+                    </div>
+                </a>
+                <mat-menu #menu="matMenu">
+                    <button [routerLink]="['account', userDetail.id]" mat-menu-item>
             <mat-icon>account_circle</mat-icon>
             <span>View Profile</span>
           </button>
-          <button routerLink="/change-password" mat-menu-item>
+                    <button routerLink="/change-password" mat-menu-item>
             <mat-icon>lock</mat-icon>
             <span>Change Password</span>
           </button>
-          <button (click)="logout()" mat-menu-item>
+                    <button (click)="logout()" mat-menu-item>
             <mat-icon>logout</mat-icon>
             <span>Logout</span>
           </button>
-        </mat-menu>
-      </div>
-    </div>
-  </mat-toolbar>
+                </mat-menu>
+            </div>
+        </div>
+    </mat-toolbar>
 </div>
