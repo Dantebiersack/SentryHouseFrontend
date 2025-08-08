@@ -91,10 +91,6 @@ export const routes: Routes = [
      {
         path: 'contactanos',
         component: Contactanos,
-        canActivate: [roleGuard],
-        data:{
-            roles: ['Admin', 'User']
-        } 
     },
     {
         path: 'comentarios',

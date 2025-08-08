@@ -2,50 +2,53 @@
   <mat-toolbar class="!bg-green-700 px-12 py-2 flex justify-between items-center">
     <!-- Logo -->
     <a [routerLink]="['/']" class="text-white hover:underline flex items-center gap-1">
-      <img src="images/greencodeLogo.jpg" alt="Logo"
-        class="h-10 w-10 rounded-full border-2 border-white shadow-md" />
+      <img src="images/greencodeLogo.jpg" alt="Logo" class="h-10 w-10 rounded-full border-2 border-white shadow-md" />
       <span class="text-white font-semibold text-lg">Sentry House</span>
     </a>
 
-    <!-- Menú según rol -->
-    <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin'); else userMenu"
-      class="flex gap-8 items-center">
-      <a [routerLink]="['users']" class="text-white hover:underline flex items-center gap-1">
-        <mat-icon>groups</mat-icon> Users
-      </a>
-      <a [routerLink]="['roles']" class="text-white hover:underline flex items-center gap-1">
-        <mat-icon>settings</mat-icon> Roles
-      </a>
-      <a [routerLink]="['proveedores']" class="text-white hover:underline flex items-center gap-1">
-        <mat-icon>inventory_2</mat-icon> Proveedores
-      </a>
-      <a [routerLink]="['materia-prima']" class="text-white hover:underline flex items-center gap-1">
-        <mat-icon>science</mat-icon> Materia Prima
-      </a>
-      <a [routerLink]="['servicios']" class="text-white hover:underline flex items-center gap-1">
-        <mat-icon>toc</mat-icon> Servicios
-      </a>
+    <div class="flex gap-8 items-center">
+      <!-- Menú según rol -->
+      <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin'); else userMenu"
+        class="flex gap-8 items-center">
+        <a [routerLink]="['users']" class="text-white hover:underline flex items-center gap-1">
+          <mat-icon>groups</mat-icon> Users
+        </a>
+        <a [routerLink]="['roles']" class="text-white hover:underline flex items-center gap-1">
+          <mat-icon>settings</mat-icon> Roles
+        </a>
+        <a [routerLink]="['proveedores']" class="text-white hover:underline flex items-center gap-1">
+          <mat-icon>inventory_2</mat-icon> Proveedores
+        </a>
+        <a [routerLink]="['materia-prima']" class="text-white hover:underline flex items-center gap-1">
+          <mat-icon>science</mat-icon> Materia Prima
+        </a>
+        <a [routerLink]="['servicios']" class="text-white hover:underline flex items-center gap-1">
+          <mat-icon>toc</mat-icon> Servicios
+        </a>
+        <a [routerLink]="['comentarios']" class="text-white hover:underline flex items-center gap-1">
+          <mat-icon>comment</mat-icon> Comentarios
+        </a>
+      </div>
+
+      <!-- Menú para User -->
+      <ng-template #userMenu>
+        <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('User')"
+          class="flex gap-8 items-center">
+          <a [routerLink]="['']" class="text-white hover:underline flex items-center gap-1">
+            <mat-icon>home</mat-icon> Home
+          </a>
+          <a [routerLink]="['historico']" class="text-white hover:underline flex items-center gap-1">
+            <mat-icon>list</mat-icon> Histórico
+          </a>
+        </div>
+      </ng-template>
       <a [routerLink]="['/contactanos']" class="text-white hover:underline flex items-center gap-1">
-        <mat-icon>mail</mat-icon> Contáctanos
-      </a>
-      <a [routerLink]="['comentarios']" class="text-white hover:underline flex items-center gap-1">
-        <mat-icon>comment</mat-icon> Comentarios
+            <mat-icon>mail</mat-icon> Contáctanos
       </a>
     </div>
 
-    <!-- Menú para User -->
-    <ng-template #userMenu>
-      <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('User')"
-        class="flex gap-8 items-center">
-        <a [routerLink]="['']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>home</mat-icon> Home
-        </a>
-        <a [routerLink]="['historico']" class="text-white hover:underline flex items-center gap-1">
-          <mat-icon>list</mat-icon> Historico
-        </a>
-        
-      </div>
-    </ng-template>
+
+
 
     <!-- Perfil del usuario -->
     <div *ngIf="isLoggedIn() && authService.getUserDetail() as userDetail">
