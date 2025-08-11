@@ -10,6 +10,7 @@ import { UserDetail } from 'app/interfaces/user-detail';
 import { ResetPasswordRequest } from 'app/interfaces/reset-password-request';
 import { ChangePasswordRequest } from 'app/interfaces/change-password-request';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -114,5 +115,15 @@ export class Auth {
     const userDetail: AuthResponse = JSON.parse(user);
     return userDetail.refreshToken;
   };
+
+  getClients = () =>
+  this.getAll().pipe(
+    map((users: UserDetail[]) =>
+      users.filter(u => {
+        const roles = (u.roles || []) as Array<string | number>;
+        return roles.some(r => r === 2 || r === '2' || String(r).toLowerCase() === 'user');
+      })
+    )
+  );
 
 }

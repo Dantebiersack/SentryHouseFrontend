@@ -25,4 +25,13 @@ export class ServiciosService {
     deleteServicio(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
+
+    getServicioDetalle(id: number): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/${id}/detalle`);
+    }
+    setMateriales(id: number, materiales: Array<{ materiaPrimaId: number; cantidadRequerida: number; unidad?: string }>): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/${id}/materiales`, materiales);
+    }
+
+    
 }

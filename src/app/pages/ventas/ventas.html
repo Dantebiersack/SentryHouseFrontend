@@ -1,0 +1,348 @@
+<div class="p-8 max-w-7xl mx-auto space-y-6">
+  <div class="flex items-center justify-between">
+    <h2 class="text-3xl font-bold text-gray-800">Ventas</h2>
+
+    <div class="flex items-center gap-3">
+      <!-- Autocomplete de cliente (barra superior) -->
+      <div class="relative">
+        <input
+          type="text"
+          class="border rounded p-2 w-72"
+          placeholder="Buscar cliente (nombre o email)…"
+          [ngModel]="clienteQuery()"
+          (ngModelChange)="onClienteInput($event)"
+          (focus)="showSug = true"
+          (blur)="onBlurCliente()"
+        />
+
+        <ul
+          *ngIf="showSug && clienteQuery() && clientesFiltrados().length"
+          class="absolute z-50 mt-1 w-full bg-white border rounded shadow max-h-60 overflow-auto"
+        >
+          <li
+            *ngFor="let u of clientesFiltrados()"
+            class="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+            (mousedown)="selectCliente(u)"
+          >
+            <div class="font-medium">{{ u.fullName }}</div>
+            <div class="text-xs text-gray-500">{{ u.email }}</div>
+          </li>
+        </ul>
+      </div>
+
+      <button
+        class="border rounded px-3 py-2 hover:bg-gray-50"
+        (click)="cargarVentasUsuario()"
+      >
+        Cargar ventas
+      </button>
+
+      <button
+        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+        (click)="nuevaVenta()"
+      >
+        + Nueva venta
+      </button>
+    </div>
+  </div>
+
+  <!-- Listado -->
+  <div *ngIf="!editorAbierto()" class="overflow-x-auto bg-white rounded shadow">
+    <table class="min-w-full">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="text-left p-3">ID</th>
+          <th class="text-left p-3">Fecha</th>
+          <th class="text-left p-3">Estado</th>
+          <th class="text-right p-3">Subtotal</th>
+          <th class="text-right p-3">IVA</th>
+          <th class="text-right p-3">Total</th>
+          <th class="text-right p-3">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let v of ventas()" class="border-t hover:bg-gray-50">
+          <td class="p-3">{{ v.id }}</td>
+          <td class="p-3">{{ v.fechaVenta | date : "yyyy-MM-dd HH:mm" }}</td>
+          <td class="p-3">
+            <span
+              class="px-2 py-1 text-xs rounded"
+              [ngClass]="badgeClass(v.estado)"
+            >
+              {{ estadoLabel(v.estado) }}
+            </span>
+          </td>
+          <td class="p-3 text-right">
+            {{ v.subtotal || 0 | number : "1.2-2" }}
+          </td>
+          <td class="p-3 text-right">{{ v.iva || 0 | number : "1.2-2" }}</td>
+          <td class="p-3 text-right font-semibold">
+            {{ v.total || 0 | number : "1.2-2" }}
+          </td>
+          <td class="p-3 text-right">
+            <button
+              class="text-blue-600 hover:underline"
+              (click)="abrirDetalle(v.id)"
+            >
+              Ver
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Editor / Detalle -->
+  <div *ngIf="editorAbierto()" class="bg-white rounded shadow p-5 space-y-4">
+    <div class="flex items-center justify-between">
+      <h3 class="text-xl font-semibold">
+        {{ ventaIdActual() ? "Venta #" + ventaIdActual() : "Nueva venta" }}
+      </h3>
+      <button class="text-gray-600 underline" (click)="cerrarEditor()">
+        Regresar
+      </button>
+    </div>
+
+    <!-- Encabezado -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="md:col-span-2">
+        <label class="text-sm text-gray-600">Cliente</label>
+        <div class="relative">
+          <input
+            type="text"
+            class="border rounded p-2 w-full"
+            placeholder="Buscar cliente (nombre o email)…"
+            [ngModel]="clienteQuery()"
+            (ngModelChange)="onClienteInput($event)"
+            (focus)="showSug = !ventaIdActual()"
+            (blur)="onBlurCliente()"
+            [disabled]="ventaIdActual() !== null"
+          />
+          <ul
+            *ngIf="
+              showSug &&
+              !ventaIdActual() &&
+              clienteQuery() &&
+              clientesFiltrados().length
+            "
+            class="absolute z-50 mt-1 w-full bg-white border rounded shadow max-h-60 overflow-auto"
+          >
+            <li
+              *ngFor="let u of clientesFiltrados()"
+              class="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+              (mousedown)="selectCliente(u)"
+            >
+              <div class="font-medium">{{ u.fullName }}</div>
+              <div class="text-xs text-gray-500">{{ u.email }}</div>
+            </li>
+          </ul>
+        </div>
+        <small *ngIf="usuarioId" class="text-xs text-gray-500"
+          >ID seleccionado: {{ usuarioId }}</small
+        >
+      </div>
+
+      <div>
+        <label class="text-sm text-gray-600">Fecha</label>
+        <input
+          type="text"
+          class="border rounded p-2 w-full"
+          [value]="fechaISO"
+          disabled
+        />
+      </div>
+      <div>
+        <label class="text-sm text-gray-600">Estado</label>
+        <input
+          type="text"
+          class="border rounded p-2 w-full"
+          [value]="estadoLabel(detalle()?.estado)"
+          disabled
+        />
+      </div>
+    </div>
+
+    <!-- Líneas (nueva venta) -->
+    <div *ngIf="!ventaIdActual()" class="space-y-2">
+      <h4 class="font-semibold">Líneas</h4>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="text-left p-2">Servicio</th>
+              <th class="text-right p-2">Cantidad</th>
+              <th class="text-right p-2">Precio unitario</th>
+              <th class="text-right p-2">IVA %</th>
+              <th class="text-right p-2">Subtotal</th>
+              <th class="text-right p-2">IVA</th>
+              <th class="text-right p-2">Total</th>
+              <th class="p-2"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let li of lineas(); let i = index" class="border-t">
+              <td class="p-2">
+                <select
+                  class="border rounded p-2"
+                  [ngModel]="li.servicioId"
+                  (ngModelChange)="updateLinea(i, { servicioId: $event })"
+                >
+                  <option [ngValue]="null">Seleccione...</option>
+                  <option *ngFor="let s of servicios()" [ngValue]="s.id">
+                    {{ s.nombre }}
+                  </option>
+                </select>
+              </td>
+              <td class="p-2 text-right">
+                <input
+                  type="number"
+                  class="border rounded p-2 w-24 text-right"
+                  [ngModel]="li.cantidad"
+                  (ngModelChange)="updateLinea(i, { cantidad: +$event })"
+                />
+              </td>
+              <td class="p-2 text-right">
+                <input
+                  type="number"
+                  step="0.01"
+                  class="border rounded p-2 w-28 text-right"
+                  [ngModel]="li.precioUnitario"
+                  (ngModelChange)="updateLinea(i, { precioUnitario: +$event })"
+                />
+              </td>
+              <td class="p-2 text-right">
+                <input
+                  type="number"
+                  step="0.01"
+                  class="border rounded p-2 w-20 text-right"
+                  [ngModel]="li.ivaPorcentaje"
+                  (ngModelChange)="updateLinea(i, { ivaPorcentaje: +$event })"
+                />
+              </td>
+              <td class="p-2 text-right">
+                {{ calcSub(li) | number : "1.2-2" }}
+              </td>
+              <td class="p-2 text-right">
+                {{ calcIva(li) | number : "1.2-2" }}
+              </td>
+              <td class="p-2 text-right font-semibold">
+                {{ calcTotal(li) | number : "1.2-2" }}
+              </td>
+              <td class="p-2 text-right">
+                <button
+                  class="text-red-600 hover:underline"
+                  (click)="removerLinea(i)"
+                >
+                  Quitar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="border rounded px-3 py-1" (click)="agregarLinea()">
+        + Agregar línea
+      </button>
+
+      <div class="text-right space-y-1">
+        <div>
+          Subtotal: <b>{{ totales().subtotal | number : "1.2-2" }}</b>
+        </div>
+        <div>
+          IVA: <b>{{ totales().iva | number : "1.2-2" }}</b>
+        </div>
+        <div>
+          Total: <b>{{ totales().total | number : "1.2-2" }}</b>
+        </div>
+      </div>
+
+      <div class="pt-2">
+        <button
+          class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800"
+          (click)="crearVenta()"
+          [disabled]="!usuarioId || lineas().length === 0"
+        >
+          Crear venta
+        </button>
+      </div>
+    </div>
+
+    <!-- Detalle (venta existente) -->
+    <div *ngIf="ventaIdActual()" class="space-y-3">
+      <h4 class="font-semibold">Detalle de líneas</h4>
+
+      <div class="overflow-x-auto">
+        <table class="min-w-full">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="text-left p-2">Servicio</th>
+              <th class="text-right p-2">Cantidad</th>
+              <th class="text-right p-2">Precio</th>
+              <th class="text-right p-2">IVA %</th>
+              <th class="text-right p-2">Subtotal</th>
+              <th class="text-right p-2">IVA</th>
+              <th class="text-right p-2">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of detalle()?.detalles" class="border-t">
+              <td class="p-2">{{ d.servicioNombre }}</td>
+              <td class="p-2 text-right">{{ d.cantidad }}</td>
+              <td class="p-2 text-right">
+                {{ d.precioUnitario | number : "1.2-2" }}
+              </td>
+              <td class="p-2 text-right">
+                {{ d.ivaPorcentaje | number : "1.2-2" }}
+              </td>
+              <td class="p-2 text-right">
+                {{ d.subtotal | number : "1.2-2" }}
+              </td>
+              <td class="p-2 text-right">{{ d.iva | number : "1.2-2" }}</td>
+              <td class="p-2 text-right font-semibold">
+                {{ d.totalLinea | number : "1.2-2" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-right space-x-2">
+        <button
+          class="bg-blue-700 text-white px-3 py-1 rounded"
+          (click)="cambiarEstadoDetalle('confirmar')"
+          [disabled]="!puedeConfirmar()"
+        >
+          Confirmar
+        </button>
+        <button
+          class="bg-amber-700 text-white px-3 py-1 rounded"
+          (click)="cambiarEstadoDetalle('entregar')"
+          [disabled]="!puedeEntregar()"
+        >
+          Entregar
+        </button>
+        <button
+          class="bg-red-700 text-white px-3 py-1 rounded"
+          (click)="cambiarEstadoDetalle('cancelar')"
+          [disabled]="!puedeCancelar()"
+        >
+          Cancelar
+        </button>
+      </div>
+
+      <div class="text-right space-y-1">
+        <div>
+          Subtotal: <b>{{ detalle()?.subtotal | number : "1.2-2" }}</b>
+        </div>
+        <div>
+          IVA: <b>{{ detalle()?.iva | number : "1.2-2" }}</b>
+        </div>
+        <div>
+          Total: <b>{{ detalle()?.total | number : "1.2-2" }}</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

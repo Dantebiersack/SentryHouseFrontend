@@ -16,6 +16,8 @@ import { Servicios } from './pages/servicios/servicios';
 import { Contactanos } from './pages/contactanos/contactanos';
 import { Comentarios } from './pages/comentarios/comentarios';
 import { HistoricoComponent } from './pages/historico/historico.component';
+import { Compras } from './pages/compras/compras';
+import { Ventas } from './pages/ventas/ventas';
 
 export const routes: Routes = [
     {
@@ -108,4 +110,20 @@ export const routes: Routes = [
             roles: ['User']
         } 
     },
+    {
+        path: 'compras',
+        component: Compras,
+        canActivate: [roleGuard],
+        data:{
+            roles: ['Admin']
+        }
+    },
+    {
+        path: 'ventas',
+        component: Ventas,
+        canActivate: [roleGuard],
+        data:{
+            roles: ['Admin']
+        }
+    }
 ];
