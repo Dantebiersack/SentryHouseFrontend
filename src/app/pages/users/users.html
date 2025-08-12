@@ -10,15 +10,15 @@
         </tr>
       </thead>
 
-      <tbody>
-        @for (item of user$ | async; track item.id) {
-        <tr>
-          <td class="border px-4 py-2"> {{item.fullName}}</td>
-          <td class="border px-4 py-2"> {{item.email}}</td>
-          <td class="border px-4 py-2"> {{item.roles.join(" , ") || '-'}}</td>
-        </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+            <tbody>
+                @for (item of user$ | async; track item.id) {
+                <tr>
+                    <td class="border px-4 py-2"> {{item.fullName}}</td>
+                    <td class="border px-4 py-2"> {{item.email}}</td>
+                    <td class="border px-4 py-2"> {{item.roles.join(" , ") || '-'}}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
