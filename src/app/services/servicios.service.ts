@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Servicio } from '../interfaces/servicio-interface';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { Cotizacion } from '../interfaces/cotizacion'; 
+import { User } from '../interfaces/user-detail';
+import { AuthResponse } from '../interfaces/auth-response';
 
 @Injectable({ providedIn: 'root' })
 export class ServiciosService {
@@ -33,5 +36,20 @@ export class ServiciosService {
         return this.http.put<void>(`${this.apiUrl}/${id}/materiales`, materiales);
     }
 
-    
+    setCotizacion(id: number, materiales: Array<{ materiaPrimaId: number; cantidadRequerida: number; unidad?: string }>): Observable<void> {
+        return this.http.put<void>(`${this.apiUrl}/${id}/materiales`, materiales);
+    }
+
+    // Nuevo método para enviar una cotización
+    crearCotizacion(cotizacion: Cotizacion): Observable<Cotizacion> {
+        // La URL para las cotizaciones es 'api/Cotizaciones'
+        const cotizacionesUrl = `${environment.apiUrl}Cotizaciones`;
+        return this.http.post<Cotizacion>(cotizacionesUrl, cotizacion);
+    }
+
+    // Nuevo método para crear un usuario
+    crearUsuario(user: User): Observable<AuthResponse> {
+        const crearUserURL = `${environment.apiUrl}Account/register`;
+        return this.http.post<AuthResponse>(crearUserURL, user);
+    }
 }

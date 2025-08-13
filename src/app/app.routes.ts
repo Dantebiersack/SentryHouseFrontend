@@ -18,6 +18,7 @@ import { Comentarios } from './pages/comentarios/comentarios';
 import { HistoricoComponent } from './pages/historico/historico.component';
 import { Compras } from './pages/compras/compras';
 import { Ventas } from './pages/ventas/ventas';
+import { CotizarComponent as Cotizar } from './pages/cotizar/cotizar.component';
 
 export const routes: Routes = [
     {
@@ -90,7 +91,7 @@ export const routes: Routes = [
             roles: ['Admin']
         }
     },
-     {
+      {
         path: 'contactanos',
         component: Contactanos,
     },
@@ -125,5 +126,9 @@ export const routes: Routes = [
         data:{
             roles: ['Admin']
         }
-    }
+    },
+    {
+        path: 'cotizar',
+        component: Cotizar,
+    },
 ];

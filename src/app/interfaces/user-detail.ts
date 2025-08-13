@@ -8,3 +8,10 @@ export interface UserDetail {
   phoneNumberConfirmed: true;
   accessFailedCount: 0;
 }
+
+export interface User {
+  fullName: string;
+  password: string,
+  email: string;
+  roles: string[];
+}
