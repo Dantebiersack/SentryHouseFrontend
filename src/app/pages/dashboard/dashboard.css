@@ -1,0 +1,129 @@
+/* ================================
+   Dashboard theme (oscuro corporativo)
+   ================================ */
+:root {
+  --bg: #0b1220;           /* fondo principal */
+  --panel: #0f172a;        /* paneles / cards */
+  --panel-2: #0d1a2b;      /* variación */
+  --border: #1f2937;       /* líneas/bordes */
+  --text: #e5e7eb;         /* texto */
+  --muted: #94a3b8;        /* texto secundario */
+  --primary: #2563eb;      /* botón principal */
+  --primary-600: #1d4ed8;
+  --success: #10b981;
+  --danger: #ef4444;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Wrapper y top bar del dashboard */
+.wrapper { max-width: 1200px; margin: 0 auto; padding: 20px; }
+.toolbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.toolbar h1 { margin: 0; font-size: 20px; font-weight: 600; color: var(--text); }
+
+/* Filtros (fecha + botón) */
+.filters { display: flex; gap: 10px; align-items: flex-end; }
+.filters label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); }
+.filters input[type="date"] {
+  appearance: none;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 10px;
+  outline: none;
+}
+.filters input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1) opacity(0.7); }
+.filters button {
+  height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--primary);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
+  transition: transform .05s ease, background .2s ease;
+}
+.filters button:hover { background: var(--primary-600); }
+.filters button:active { transform: translateY(1px); }
+
+/* Alertas */
+.banner { padding: 10px 12px; border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border); }
+.banner.info { background: rgba(37, 99, 235, .10); color: #cfe0ff; }
+.banner.error { background: rgba(239, 68, 68, .10); color: #ffd1d1; }
+
+/* KPI Cards */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.4);
+}
+.card-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.card-value { font-size: 18px; font-weight: 700; letter-spacing: .2px; }
+
+/* Grid de paneles principales */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 12px;
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.35);
+}
+.panel-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 8px; }
+.panel h2 { margin: 0; font-size: 15px; font-weight: 600; color: var(--text); }
+.panel small { color: var(--muted); }
+.panel.span-2 { grid-column: span 2; }
+
+/* Canvases (charts) */
+.chart { position: relative; height: 340px; }
+.chart canvas { width: 100% !important; height: 100% !important; }
+
+/* Leyenda (ventas por estado) */
+.legend { margin-top: 10px; font-size: 14px; }
+.legend-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px dashed var(--border); color: var(--text);
+}
+
+/* Tabla Top servicios */
+.table-wrap { overflow: auto; border-radius: 14px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+thead th {
+  text-align: left; padding: 10px 12px; background: var(--panel-2);
+  color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border);
+}
+tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: rgba(148, 163, 184, 0.06); }
+.empty { text-align: center; color: var(--muted); }
+
+/* Scrollbar sutil */
+.table-wrap::-webkit-scrollbar, .chart::-webkit-scrollbar { height: 8px; width: 8px; }
+.table-wrap::-webkit-scrollbar-thumb, .chart::-webkit-scrollbar-thumb {
+  background: #233044; border-radius: 10px;
+}
+
+/* Responsivo */
+@media (max-width: 1200px) {
+  .kpis { grid-template-columns: repeat(3, 1fr); }
+  .grid { grid-template-columns: 1fr 1fr; }
+  .panel.span-2 { grid-column: span 2; }
+}
+@media (max-width: 720px) {
+  .kpis { grid-template-columns: 1fr 1fr; }
+  .grid { grid-template-columns: 1fr; }
+  .filters { flex-wrap: wrap; }
+}

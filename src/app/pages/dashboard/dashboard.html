@@ -1,0 +1,106 @@
+
+
+<div class="wrapper">
+  <div class="toolbar">
+    <h1>Dashboard</h1>
+    <div class="filters">
+      <label>
+        <span>Desde</span>
+        <input type="date" [(ngModel)]="from" (ngModelChange)="load()">
+      </label>
+      <label>
+        <span>Hasta</span>
+        <input type="date" [(ngModel)]="to">
+      </label>
+      <button (click)="load()">Actualizar</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="banner info">Cargando…</div>
+  <div *ngIf="error" class="banner error">{{ error }}</div>
+
+  <!-- KPI Cards -->
+  <div class="kpis">
+    <div class="card">
+      <div class="card-label">Ventas hoy</div>
+      <div class="card-value">{{ data?.kpis?.ventasHoy | currency:'MXN' }}</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Ventas semana</div>
+      <div class="card-value">{{ data?.kpis?.ventasSemana | currency:'MXN' }}</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Ventas mes</div>
+      <div class="card-value">{{ data?.kpis?.ventasMes | currency:'MXN' }}</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Subtotal</div>
+      <div class="card-value">{{ data?.kpis?.subtotal | currency:'MXN' }}</div>
+    </div>
+    <div class="card">
+      <div class="card-label">IVA</div>
+      <div class="card-value">{{ data?.kpis?.iva | currency:'MXN' }}</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Total (rango)</div>
+      <div class="card-value">{{ data?.kpis?.total | currency:'MXN' }}</div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Line chart -->
+    <div class="panel span-2">
+      <div class="panel-head">
+        <h2>Ventas por día</h2>
+        <small>{{ data.rango.from | date:'dd/MM/yyyy' }} → {{ data.rango.to | date:'dd/MM/yyyy' }}</small>
+      </div>
+      <div class="chart">
+        <canvas #lineCanvas></canvas>
+      </div>
+    </div>
+
+    <!-- Doughnut chart -->
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Ventas por estado</h2>
+      </div>
+      <div class="chart">
+        <canvas #doughnutCanvas></canvas>
+      </div>
+      <div class="legend" *ngIf="data">
+        <div *ngFor="let e of data.porEstado" class="legend-row">
+          <span>{{ e.estado }}</span>
+          <span>{{ e.cantidad }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top servicios -->
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Top servicios por importe</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Cantidad</th>
+            <th>Importe</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of data?.topServicios">
+            <td>{{ s.servicio }}</td>
+            <td>{{ s.cantidad }}</td>
+            <td>{{ s.importe | currency:'MXN' }}</td>
+          </tr>
+          <tr *ngIf="!data?.topServicios?.length">
+            <td colspan="3" class="empty">Sin datos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

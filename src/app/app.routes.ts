@@ -19,6 +19,7 @@ import { HistoricoComponent } from './pages/historico/historico.component';
 import { Compras } from './pages/compras/compras';
 import { Ventas } from './pages/ventas/ventas';
 import { CotizarComponent as Cotizar } from './pages/cotizar/cotizar.component';
+import { Dashboard } from './pages/dashboard/dashboard';
 
 export const routes: Routes = [
     {
@@ -131,4 +132,12 @@ export const routes: Routes = [
         path: 'cotizar',
         component: Cotizar,
     },
+    {
+        path: 'dashboard',
+        component: Dashboard,
+        canActivate: [authGuard],
+        data:{
+            roles: ['Admin']
+        }
+    }
 ];
