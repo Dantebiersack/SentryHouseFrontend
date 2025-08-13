@@ -13,7 +13,7 @@ import { ChangePassword } from './pages/change-password/change-password';
 import { Proveedores } from './pages/proveedores/proveedores';
 import { MateriaPrima } from './pages/materia-prima/materia-prima';
 import { Servicios } from './pages/servicios/servicios';
-import { Contactanos } from './pages/contactanos/contactanos';
+import { ContactanosComponent as Contactanos } from './pages/contactanos/contactanos';
 import { Comentarios } from './pages/comentarios/comentarios';
 import { HistoricoComponent } from './pages/historico/historico.component';
 import { Compras } from './pages/compras/compras';

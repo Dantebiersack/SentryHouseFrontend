@@ -15,6 +15,7 @@ export interface Venta {
   iva?: number;
   total?: number;
   // opcionales por si tu endpoint incluye nombres de servicios u otros campos
+  //sin estos campos el historico no funciona
   servicioNombre: string;
   servicioDescripcion: string;
   archivoDocumento: string;
