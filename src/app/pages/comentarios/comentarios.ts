@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
+import { ComentariosService, Comentario } from 'app/services/comentarios.service';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
 @Component({
   selector: 'app-comentarios',
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './comentarios.html',
-  styleUrls: ['./comentarios.css']
+  styleUrl: './comentarios.css'
 })
 export class Comentarios {
   comentario = {
@@ -20,10 +21,7 @@ export class Comentarios {
 
   enviarComentario() {
     if (this.comentario.nombre && this.comentario.email && this.comentario.mensaje) {
-      this.comentarios.push({
-        ...this.comentario,
-        fecha: this.obtenerHoraActual()
-      });
+      this.comentarios.push({ ...this.comentario });
       this.comentario = { nombre: '', email: '', mensaje: '' };
     }
   }
