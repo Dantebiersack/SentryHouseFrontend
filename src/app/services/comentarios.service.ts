@@ -2,24 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface Comentario {
-  name: string;
-  email: string;
-  message: string;
+  nombre: string;
+  correo: string;
+  mensaje: string;
+  fecha: Date;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class ComentariosService {
-  private apiUrl = 'https://localhost:5000/api/comentarios'; 
+  private comentarios: Comentario[] = [];
 
-  constructor(private http: HttpClient) {}
-
-  getComentarios() {
-    return this.http.get<Comentario[]>(this.apiUrl);
+  agregarComentario(comentario: Comentario) {
+    this.comentarios.push(comentario);
   }
 
-  enviarComentario(comentario: Comentario) {
-    return this.http.post<Comentario>(this.apiUrl, comentario);
+  obtenerComentarios(): Comentario[] {
+    return this.comentarios;
   }
 }

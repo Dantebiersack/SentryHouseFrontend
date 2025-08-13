@@ -17,15 +17,18 @@
         <div class="comments-list-section">
             <h2 class="section-title">Comentarios</h2>
 
-            <div *ngFor="let c of comentarios" class="comment-item">
+            <div *ngFor="let c of comentarios" class="comment-item border-b pb-2 mb-2">
                 <div class="comment-content">
-                    <div class="comment-header">
-                        <span class="comment-author">{{ c.nombre }}</span>
-                        <span class="comment-meta">
-            {{ obtenerHoraActual() }}
-          </span>
+                    <div class="comment-header flex justify-between items-center">
+                        <div>
+                            <span class="comment-author font-bold">{{ c.nombre }}</span>
+                            <span class="text-gray-500 text-sm"> - {{ c.email }}</span>
+                        </div>
+                        <span class="comment-meta text-gray-400 text-xs">
+                            {{ c.fecha }}
+                        </span>
                     </div>
-                    <p class="comment-text">{{ c.mensaje }}</p>
+                    <p class="comment-text mt-1">{{ c.mensaje }}</p>
                 </div>
             </div>
         </div>
