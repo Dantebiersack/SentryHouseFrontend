@@ -1,5 +1,5 @@
 <div>
-    <mat-toolbar class="!bg-gradient-to-r from-green-700 to-emerald-600 px-12 py-3 flex justify-between items-center shadow-xl">
+    <mat-toolbar class="!bg-gradient-to-r from-green-700 to-emerald-600 px-12 py-3 flex justify-between items-center shadow-xl text-white">
         <!-- Logo -->
         <a [routerLink]="['/']" class="flex items-center gap-2 group">
             <img src="images/greencodeLogo.jpg" alt="Logo" class="h-10 w-10 rounded-full border-2 border-white shadow-md group-hover:scale-105 transition-transform duration-300" />
@@ -12,50 +12,50 @@
         <div class="flex gap-8 items-center">
             <!-- Admin Menu -->
             <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin'); else userMenu" class="flex gap-6 items-center">
-                <a [routerLink]="['users']" class="nav-link">
-                    <mat-icon>groups</mat-icon> Usuarios
+                <a [routerLink]="['users']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">groups</mat-icon> Usuarios
                 </a>
-                <a [routerLink]="['roles']" class="nav-link">
-                    <mat-icon>settings</mat-icon> Roles
+                <a [routerLink]="['roles']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">settings</mat-icon> Roles
                 </a>
-                <a [routerLink]="['proveedores']" class="nav-link">
-                    <mat-icon>inventory_2</mat-icon> Proveedores
+                <a [routerLink]="['proveedores']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">inventory_2</mat-icon> Proveedores
                 </a>
-                <a [routerLink]="['materia-prima']" class="nav-link">
-                    <mat-icon>science</mat-icon> Materia Prima
+                <a [routerLink]="['materia-prima']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">science</mat-icon> Materia Prima
                 </a>
-                <a [routerLink]="['compras']" class="nav-link">
-                    <mat-icon>inventory_2</mat-icon> Compras
+                <a [routerLink]="['compras']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">inventory_2</mat-icon> Compras
                 </a>
-                <a [routerLink]="['servicios']" class="nav-link">
-                    <mat-icon>toc</mat-icon> Servicios
+                <a [routerLink]="['servicios']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">toc</mat-icon> Servicios
                 </a>
-                <a [routerLink]="['ventas']" class="nav-link">
-                    <mat-icon>inventory_2</mat-icon> Ventas
+                <a [routerLink]="['ventas']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">inventory_2</mat-icon> Ventas
                 </a>
-                <a [routerLink]="['comentarios']" class="nav-link">
-                    <mat-icon>comment</mat-icon> Comentarios
+                <a [routerLink]="['comentarios']" class="nav-link text-white hover:text-green-100">
+                    <mat-icon class="text-white">comment</mat-icon> Comentarios
                 </a>
             </div>
 
             <!-- User Menu -->
             <ng-template #userMenu>
                 <div *ngIf="isLoggedIn() && authService.getUserDetail()?.roles.includes('User')" class="flex gap-6 items-center">
-                    <a [routerLink]="['']" class="nav-link">
-                        <mat-icon>home</mat-icon> Home
+                    <a [routerLink]="['']" class="nav-link text-white hover:text-green-100">
+                        <mat-icon class="text-white">home</mat-icon> Home
                     </a>
-                    <a [routerLink]="['historico']" class="nav-link">
-                        <mat-icon>list</mat-icon> Histórico
+                    <a [routerLink]="['historico']" class="nav-link text-white hover:text-green-100">
+                        <mat-icon class="text-white">list</mat-icon> Histórico
                     </a>
-                    <a [routerLink]="['comentarios']" class="nav-link">
-                    <mat-icon>comment</mat-icon> Comentarios
-                </a>
+                    <a [routerLink]="['comentarios']" class="nav-link text-white hover:text-green-100">
+                        <mat-icon class="text-white">comment</mat-icon> Comentarios
+                    </a>
                 </div>
             </ng-template>
 
             @if (!(isLoggedIn() && authService.getUserDetail()?.roles.includes('Admin'))) {
-            <a [routerLink]="['/contactanos']" class="nav-link">
-                <mat-icon>mail</mat-icon> Contáctanos
+            <a [routerLink]="['/contactanos']" class="nav-link text-white hover:text-green-100">
+                <mat-icon class="text-white">mail</mat-icon> Contáctanos
             </a>
             }
         </div>
