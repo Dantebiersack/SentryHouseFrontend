@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Venta, VentaCreateDto, VentaDetailDto, EstadoVenta } from '../interfaces/venta';
 import { environment } from '../../environments/environment';
+import { Cotizacion } from '../interfaces/cotizacion'; 
 
 @Injectable({ providedIn: 'root' })
 export class VentasService {
   private base = `${environment.apiUrl}Ventas`; // ej. https://tuapi/api/Ventas
+  private baseCot = `${environment.apiUrl}Cotizaciones`;
 
   constructor(private http: HttpClient) {}
 
@@ -26,5 +28,9 @@ export class VentasService {
 
   cambiarEstado(id: number, estado: EstadoVenta): Observable<void> {
     return this.http.put<void>(`${this.base}/${id}/estado`, { estado });
+  }
+
+  getCotizacionesUsuario(usuarioId: string): Observable<Cotizacion[]> {
+    return this.http.get<Cotizacion[]>(`${this.baseCot}/misCotizaciones/${usuarioId}`);
   }
 }

@@ -1,12 +1,15 @@
 <div class="mx-60 py-10">
-  <h1 class="text-3xl font-bold">Histórico de Ventas</h1>
-  <div class="shadow-md text-left rounded-md mt-4">
+
+  <!-- Tabla de Ventas -->
+  <h1 class="text-3xl font-bold mb-4">Histórico de Ventas</h1>
+  <div class="shadow-md text-left rounded-md mb-10">
     <table class="w-full rounded-md border-collapse">
       <thead>
         <tr class="bg-gray-200">
           <th class="px-4 py-3 text-sm font-semibold text-gray-700">Nombre del Servicio</th>
           <th class="px-4 py-3 text-sm font-semibold text-gray-700">Descripción</th>
           <th class="px-4 py-3 text-sm font-semibold text-gray-700">Fecha de Venta</th>
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Estado</th>
           <th class="px-4 py-3 text-sm font-semibold text-gray-700">Archivo</th>
         </tr>
       </thead>
@@ -15,6 +18,12 @@
           <td class="px-4 py-3 text-sm text-gray-600">{{ venta.servicioNombre }}</td>
           <td class="px-4 py-3 text-sm text-gray-600">{{ venta.servicioDescripcion }}</td>
           <td class="px-4 py-3 text-sm text-gray-600">{{ venta.fechaVenta | date:'medium' }}</td>
+          <td class="px-4 py-3 text-sm text-center">
+            <span class="px-2 py-1 rounded-full font-semibold text-white"
+                  [ngClass]="{'bg-green-500': venta['estaFinalizada'], 'bg-red-500': !venta['estaFinalizada']}">
+              {{ venta['estaFinalizada'] ? 'Terminado' : 'En proceso' }}
+            </span>
+          </td>
           <td class="px-4 py-3 text-sm text-center">
             <a [href]="venta.archivoDocumento" target="_blank">
               <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-full">
@@ -26,5 +35,37 @@
       </tbody>
     </table>
   </div>
-</div>
 
+  <!-- Tabla de Cotizaciones -->
+  <h1 class="text-3xl font-bold mb-4">Histórico de Cotizaciones</h1>
+  <div class="shadow-md text-left rounded-md">
+    <table class="w-full rounded-md border-collapse">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Servicios</th>
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Fecha de Solicitud</th>
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Estado</th>
+          <th class="px-4 py-3 text-sm font-semibold text-gray-700">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cot of cotizaciones" class="border-b border-gray-200 hover:bg-gray-100">
+          <td class="px-4 py-3 text-sm text-gray-600">{{ cot.serviciosIds }}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">{{ cot.fechaSolicitud | date:'medium' }}</td>
+          <td class="px-4 py-3 text-sm text-center">
+            <span class="px-2 py-1 rounded-full font-semibold text-white"
+                  [ngClass]="{'bg-green-500': cot.estaFinalizada, 'bg-red-500': !cot.estaFinalizada}">
+              {{ cot.estaFinalizada ? 'Terminado' : 'En proceso' }}
+            </span>
+          </td>
+          <td class="px-4 py-3 text-sm text-gray-600">
+            <ul>
+              <li *ngFor="let s of cot.serviciosIds">{{ s }}</li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
