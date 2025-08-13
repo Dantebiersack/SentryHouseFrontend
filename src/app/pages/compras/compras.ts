@@ -2,6 +2,7 @@ import { Component, OnInit, computed, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 import { ComprasService } from '../../services/compras.service';
 import { MateriaPrimaService } from '../../services/materia-prima';
@@ -144,32 +145,42 @@ export class Compras implements OnInit {
   }
 
   crearCompra(): void {
-    if (this.form.invalid || this.lineas().length === 0) {
-      alert('Completa proveedor/fecha y agrega al menos una línea.');
-      this.form.markAllAsTouched();
-      return;
-    }
-    const raw = this.form.getRawValue();
-    const dto = {
-      proveedorId: raw.proveedorId!,
-      fecha: raw.fecha ? raw.fecha + 'T00:00:00Z' : undefined,
-      numeroDocumento: raw.numeroDocumento || undefined,
-      notas: raw.notas || undefined,
-      detalles: this.lineas()
-        .filter(li => li.materiaPrimaId && li.cantidad > 0 && li.precioUnitario >= 0)
-        .map(li => ({
-          materiaPrimaId: li.materiaPrimaId!,
-          cantidad: Number(li.cantidad),
-          precioUnitario: Number(li.precioUnitario),
-          ivaPorcentaje: li.ivaPorcentaje ?? 0.16
-        }))
-    };
-    this.comprasSrv.crearCompra(dto).subscribe(res => {
-      alert('Compra creada: #' + res.id);
-      this.abrirDetalle(res.id);
-      this.cargarCompras();
+  if (this.form.invalid || this.lineas().length === 0) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Campos incompletos',
+      text: 'Completa proveedor/fecha y agrega al menos una línea.',
+      confirmButtonColor: '#16a34a'
     });
+    this.form.markAllAsTouched();
+    return;
   }
+  const raw = this.form.getRawValue();
+  const dto = {
+    proveedorId: raw.proveedorId!,
+    fecha: raw.fecha ? raw.fecha + 'T00:00:00Z' : undefined,
+    numeroDocumento: raw.numeroDocumento || undefined,
+    notas: raw.notas || undefined,
+    detalles: this.lineas()
+      .filter(li => li.materiaPrimaId && li.cantidad > 0 && li.precioUnitario >= 0)
+      .map(li => ({
+        materiaPrimaId: li.materiaPrimaId!,
+        cantidad: Number(li.cantidad),
+        precioUnitario: Number(li.precioUnitario),
+        ivaPorcentaje: li.ivaPorcentaje ?? 0.16
+      }))
+  };
+  this.comprasSrv.crearCompra(dto).subscribe(res => {
+    Swal.fire({
+      icon: 'success',
+      title: '¡Compra creada!',
+      text: `Compra creada: #${res.id}`,
+      confirmButtonColor: '#16a34a'
+    });
+    this.abrirDetalle(res.id);
+    this.cargarCompras();
+  });
+}
 
   guardarEncabezado(): void {
     // alias de crearCompra si quisieras separar botón de "Guardar compra"
@@ -177,36 +188,45 @@ export class Compras implements OnInit {
   }
 
   actualizarEncabezado(): void {
-    const id = this.compraIdActual();
-    if (!id) return;
-    const raw = this.form.getRawValue();
-    const dto = {
-      fecha: raw.fecha ? raw.fecha + 'T00:00:00Z' : undefined,
-      numeroDocumento: raw.numeroDocumento || undefined,
-      notas: raw.notas || undefined
-    };
-    this.comprasSrv.actualizarCompra(id, dto).subscribe(() => {
-      alert('Encabezado actualizado.');
-      this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
-      this.cargarCompras();
+  const id = this.compraIdActual();
+  if (!id) return;
+  const raw = this.form.getRawValue();
+  const dto = {
+    fecha: raw.fecha ? raw.fecha + 'T00:00:00Z' : undefined,
+    numeroDocumento: raw.numeroDocumento || undefined,
+    notas: raw.notas || undefined
+  };
+  this.comprasSrv.actualizarCompra(id, dto).subscribe(() => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Encabezado actualizado.',
+      confirmButtonColor: '#16a34a'
     });
-  }
+    this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
+    this.cargarCompras();
+  });
+}
 
   agregarDetalleServidor(): void {
-    const id = this.compraIdActual();
-    if (!id) return;
-    const li = this.nuevaLinea;
-    if (!li.materiaPrimaId || li.cantidad <= 0 || li.precioUnitario < 0) {
-      alert('Completa la nueva línea.');
-      return;
-    }
-    if (li.ivaPorcentaje === undefined || li.ivaPorcentaje === null) li.ivaPorcentaje = 0.16;
-    this.comprasSrv.agregarDetalle(id, li).subscribe(() => {
-      this.nuevaLinea = { materiaPrimaId: null as any, cantidad: 1, precioUnitario: 0, ivaPorcentaje: 0.16 };
-      this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
-      this.cargarCompras();
+  const id = this.compraIdActual();
+  if (!id) return;
+  const li = this.nuevaLinea;
+  if (!li.materiaPrimaId || li.cantidad <= 0 || li.precioUnitario < 0) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Línea incompleta',
+      text: 'Completa la nueva línea.',
+      confirmButtonColor: '#16a34a'
     });
+    return;
   }
+  if (li.ivaPorcentaje === undefined || li.ivaPorcentaje === null) li.ivaPorcentaje = 0.16;
+  this.comprasSrv.agregarDetalle(id, li).subscribe(() => {
+    this.nuevaLinea = { materiaPrimaId: null as any, cantidad: 1, precioUnitario: 0, ivaPorcentaje: 0.16 };
+    this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
+    this.cargarCompras();
+  });
+}
 
   eliminarDetalleServidor(detalleId: number): void {
     const id = this.compraIdActual();
@@ -217,32 +237,79 @@ export class Compras implements OnInit {
     });
   }
 
-  recibirCompra(id: number): void {
-    if (!confirm('¿Marcar como RECIBIDA y actualizar inventario?')) return;
-    this.comprasSrv.recibir(id).subscribe(() => {
-      alert('Compra recibida.');
-      if (this.compraIdActual() === id) this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
-      this.cargarCompras();
-    });
-  }
+ recibirCompra(id: number): void {
+  Swal.fire({
+    icon: 'question',
+    title: '¿Marcar como RECIBIDA?',
+    text: '¿Marcar como RECIBIDA y actualizar inventario?',
+    showCancelButton: true,
+    confirmButtonColor: '#16a34a',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, recibir',
+    cancelButtonText: 'Cancelar'
+  }).then(result => {
+    if (result.isConfirmed) {
+      this.comprasSrv.recibir(id).subscribe(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Compra recibida.',
+          confirmButtonColor: '#16a34a'
+        });
+        if (this.compraIdActual() === id) this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
+        this.cargarCompras();
+      });
+    }
+  });
+}
 
   cancelarCompra(id: number): void {
-    if (!confirm('¿Cancelar esta compra?')) return;
-    this.comprasSrv.cambiarEstado(id, EstadoCompra.Cancelada).subscribe(() => {
-      alert('Compra cancelada.');
-      if (this.compraIdActual() === id) this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
-      this.cargarCompras();
-    });
-  }
+  Swal.fire({
+    icon: 'warning',
+    title: '¿Cancelar esta compra?',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#16a34a',
+    confirmButtonText: 'Sí, cancelar',
+    cancelButtonText: 'No'
+  }).then(result => {
+    if (result.isConfirmed) {
+      this.comprasSrv.cambiarEstado(id, EstadoCompra.Cancelada).subscribe(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Compra cancelada.',
+          confirmButtonColor: '#16a34a'
+        });
+        if (this.compraIdActual() === id) this.comprasSrv.getCompra(id).subscribe(det => this.compraDetalle.set(det));
+        this.cargarCompras();
+      });
+    }
+  });
+}
 
   eliminarCompra(id: number): void {
-    if (!confirm('¿Eliminar definitivamente?')) return;
-    this.comprasSrv.eliminarCompra(id).subscribe(() => {
-      alert('Compra eliminada.');
-      if (this.compraIdActual() === id) this.cerrarEditor();
-      this.cargarCompras();
-    });
-  }
+  Swal.fire({
+    icon: 'warning',
+    title: '¿Eliminar definitivamente?',
+    text: 'Esta acción no se puede deshacer.',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#16a34a',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then(result => {
+    if (result.isConfirmed) {
+      this.comprasSrv.eliminarCompra(id).subscribe(() => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Compra eliminada.',
+          confirmButtonColor: '#16a34a'
+        });
+        if (this.compraIdActual() === id) this.cerrarEditor();
+        this.cargarCompras();
+      });
+    }
+  });
+}
 
   estadoLabel(e: EstadoCompra): string {
     switch (e) {

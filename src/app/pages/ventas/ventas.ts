@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 import { VentasService } from '../../services/ventas.service';
 import { ServiciosService } from '../../services/servicios.service';
@@ -93,19 +94,32 @@ export class Ventas implements OnInit {
 
   // Listado
   cargarVentasUsuario(): void {
-    if (!this.usuarioId) { alert('Selecciona un cliente.'); return; }
+    if (!this.usuarioId) {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Selecciona un cliente',
+    text: 'Debes seleccionar un cliente antes de continuar.',
+    confirmButtonColor: '#16a34a'
+  });
+  return;
+}
     this.ventasSrv.obtenerVentasPorUsuario(this.usuarioId).subscribe(v => this.ventas.set(v));
   }
 
   // Editor
-  nuevaVenta(): void {
+    nuevaVenta(): void {
     this.editorAbierto.set(true);
     this.ventaIdActual.set(null);
     this.detalle.set(null);
     this.lineas.set([]);
     this.fechaISO = new Date().toISOString();
     if (!this.usuarioId) {
-      setTimeout(() => alert('Selecciona un cliente antes de crear la venta.'), 0);
+      Swal.fire({
+        icon: 'warning',
+        title: 'Selecciona un cliente',
+        text: 'Selecciona un cliente antes de crear la venta.',
+        confirmButtonColor: '#16a34a'
+      });
     }
   }
 
@@ -158,10 +172,15 @@ export class Ventas implements OnInit {
     };
 
     this.ventasSrv.crearVenta(dto).subscribe(res => {
-      alert('Venta creada: #' + res.id);
-      this.abrirDetalle(res.id);
-      this.cargarVentasUsuario();
-    });
+  Swal.fire({
+    icon: 'success',
+    title: '¡Venta creada!',
+    text: `Venta creada: #${res.id}`,
+    confirmButtonColor: '#16a34a'
+  });
+  this.abrirDetalle(res.id);
+  this.cargarVentasUsuario();
+});
   }
 
   // Estados
